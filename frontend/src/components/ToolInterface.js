@@ -202,23 +202,23 @@ const ToolInterface = ({ tool, onBack }) => {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Result</h2>
           
           <div className="bg-gray-50 rounded-lg p-6">
-            {typeof result === 'string' && result.startsWith('data:image') ? (
-              <img src={result} alt="Generated result" className="max-w-full h-auto rounded-lg" />
-            ) : typeof result === 'string' && result.startsWith('http') ? (
+            {typeof result.result === 'string' && result.result.startsWith('data:image') ? (
+              <img src={result.result} alt="Generated result" className="max-w-full h-auto rounded-lg" />
+            ) : typeof result.result === 'string' && result.result.startsWith('http') ? (
               <div className="space-y-4">
                 <p className="text-sm text-gray-600">Generated content URL:</p>
                 <a 
-                  href={result} 
+                  href={result.result} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-800 break-all"
                 >
-                  {result}
+                  {result.result}
                 </a>
               </div>
             ) : (
               <pre className="text-sm text-gray-800 whitespace-pre-wrap">
-                {JSON.stringify(result, null, 2)}
+                {JSON.stringify(result.result, null, 2)}
               </pre>
             )}
           </div>
