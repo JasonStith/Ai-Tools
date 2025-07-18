@@ -30,6 +30,19 @@ A comprehensive AI-powered filmmaking platform inspired by Adobe Firefly's desig
 
 ## 🚀 Quick Start
 
+### **Try Demo Mode First!**
+The platform works immediately with sample AI responses. No setup required for demo:
+
+```bash
+git clone <your-repo-url>
+cd ai-filmmaking-platform
+cd frontend && yarn install
+cd ../backend && pip install -r requirements.txt
+# Start both servers and visit http://localhost:3000
+```
+
+### **Full AI Setup (Optional)**
+
 ### Prerequisites
 - Node.js 18+ and yarn
 - Python 3.9+
