@@ -11,6 +11,22 @@ function App() {
   const [currentView, setCurrentView] = useState('home');
   const [selectedTool, setSelectedTool] = useState(null);
   const [currentProject, setCurrentProject] = useState(null);
+  const [isDemoMode, setIsDemoMode] = useState(false);
+
+  // Check demo mode on app load
+  useEffect(() => {
+    const checkDemoMode = async () => {
+      try {
+        const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+        const response = await fetch(`${backendUrl}/api/test-replicate`);
+        const data = await response.json();
+        setIsDemoMode(data.mode === 'demo');
+      } catch (error) {
+        console.log('Could not check demo mode:', error);
+      }
+    };
+    checkDemoMode();
+  }, []);
 
   const handleToolSelect = (tool) => {
     setSelectedTool(tool);
