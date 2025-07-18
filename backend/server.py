@@ -68,7 +68,7 @@ AI_TOOLS = [
         "name": "Script Writer",
         "category": "Pre-Production", 
         "description": "AI-powered screenplay and script generation",
-        "replicate_model": "meta/llama-2-70b-chat",
+        "replicate_model": "meta/llama-2-7b-chat:8e6975e5ed6174911a6ff3d60540dfd4844201974602551e10e9e87ab143d81e",
         "inputs": {"prompt": "text", "system_prompt": "text"},
         "icon": "📝"
     },
