@@ -49,7 +49,14 @@ function App() {
     <div className="App min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Header currentView={currentView} onViewChange={handleViewChange} />
       
-      <main className="pt-16">
+      {/* Demo Mode Banner */}
+      {isDemoMode && (
+        <div className="fixed top-16 left-0 right-0 bg-yellow-500 text-white py-2 px-4 text-center text-sm font-medium z-40">
+          🚀 Demo Mode: Using sample AI responses. Add your Replicate API token for real AI functionality.
+        </div>
+      )}
+      
+      <main className={`${isDemoMode ? 'pt-24' : 'pt-16'}`}>
         {currentView === 'home' && (
           <>
             <Hero />
