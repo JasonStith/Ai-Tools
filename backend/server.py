@@ -282,11 +282,11 @@ async def create_project(project: ProjectModel):
             "updated_at": "2025-01-01T00:00:00Z"
         }
         
-        await db.projects.insert_one(project_data)
+        result = await db.projects.insert_one(project_data)
         
         return {
             "success": True,
-            "project": project_data
+            "project": serialize_doc(project_data)
         }
         
     except Exception as e:
