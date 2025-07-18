@@ -295,19 +295,24 @@ async def execute_tool(request: ToolRequest):
         if not tool:
             raise HTTPException(status_code=404, detail="Tool not found")
         
-        # Execute with Replicate
-        result = replicate_client.run(
-            tool["replicate_model"],
-            input=request.inputs
-        )
-        
-        # Handle different result types
-        if hasattr(result, '__iter__') and not isinstance(result, (str, bytes)):
-            # It's a generator or list, join the output
-            result = ''.join(str(item) for item in result)
-        elif not isinstance(result, (str, dict, list, int, float, bool)):
-            # Convert other types to string
-            result = str(result)
+        # Check if we have a real API key or use dummy data
+        if replicate_client and replicate_api_token:
+            # Execute with Replicate
+            result = replicate_client.run(
+                tool["replicate_model"],
+                input=request.inputs
+            )
+            
+            # Handle different result types
+            if hasattr(result, '__iter__') and not isinstance(result, (str, bytes)):
+                # It's a generator or list, join the output
+                result = ''.join(str(item) for item in result)
+            elif not isinstance(result, (str, dict, list, int, float, bool)):
+                # Convert other types to string
+                result = str(result)
+        else:
+            # Use dummy data for demo
+            result = DUMMY_RESPONSES.get(request.tool_name, f"Demo output for {request.tool_name}: This is a placeholder result. Add your Replicate API token to get real AI-generated content.")
         
         # Store result in database
         execution_record = {
@@ -316,7 +321,8 @@ async def execute_tool(request: ToolRequest):
             "inputs": request.inputs,
             "result": result,
             "project_id": request.project_id,
-            "created_at": "2025-01-01T00:00:00Z"
+            "created_at": "2025-01-01T00:00:00Z",
+            "is_demo": not bool(replicate_client and replicate_api_token)
         }
         
         await db.executions.insert_one(execution_record)
@@ -324,7 +330,8 @@ async def execute_tool(request: ToolRequest):
         return {
             "success": True,
             "result": result,
-            "execution_id": execution_record["id"]
+            "execution_id": execution_record["id"],
+            "is_demo": execution_record["is_demo"]
         }
         
     except HTTPException:
