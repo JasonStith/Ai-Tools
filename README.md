@@ -83,12 +83,11 @@ cd ../backend && pip install -r requirements.txt
    REACT_APP_BACKEND_URL=http://localhost:8001
    ```
 
-4. **Get your Replicate API token**
-   - Sign up at [replicate.com](https://replicate.com)
+4. **Get your Replicate API token (Optional - for real AI)**
+   - The platform works in demo mode without API keys
+   - For real AI functionality: Sign up at [replicate.com](https://replicate.com)
    - Go to [API tokens](https://replicate.com/account/api-tokens)
-   - Create a new token
-   - Copy the token (starts with `r8_...`)
-   - Replace `your-replicate-api-token-here` in `backend/.env`
+   - Create a new token and replace the empty value in `backend/.env`
 
 5. **Start the application**
    ```bash
