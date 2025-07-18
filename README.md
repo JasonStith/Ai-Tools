@@ -106,7 +106,24 @@ cd ../backend && pip install -r requirements.txt
 6. **Access the application**
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:8001
-   - API Documentation: http://localhost:8001/docs
+   - **Demo Mode**: Works immediately with sample AI responses
+   - **Live Mode**: Add Replicate API token for real AI functionality
+
+## 🎭 Demo vs Live Mode
+
+### **Demo Mode (No API Key Required)**
+- ✅ Beautiful UI and all functionality
+- ✅ Sample AI responses for all tools
+- ✅ Complete workflow demonstration
+- ✅ Project management works fully
+- ✅ Perfect for testing and development
+
+### **Live Mode (Requires Replicate API Key)**
+- 🤖 Real AI-generated scripts with LLama models
+- 🎨 Real AI-generated images with SDXL
+- 🎬 Real AI-generated videos with Stable Video Diffusion
+- 🎵 Real AI-generated audio with Bark
+- 💰 Uses Replicate credits for generations
 
 ## 🛠️ Technology Stack
 
