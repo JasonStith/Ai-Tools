@@ -160,6 +160,17 @@ const ToolInterface = ({ tool, onBack }) => {
           </div>
         )}
 
+        {/* Demo Mode Banner */}
+        {result && result.is_demo && (
+          <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <div className="flex items-center">
+              <span className="text-yellow-600 text-sm">
+                🚀 <strong>Demo Mode:</strong> This is sample output. Add your Replicate API token to get real AI-generated content.
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Execute Button */}
         <div className="mt-8">
           <motion.button
