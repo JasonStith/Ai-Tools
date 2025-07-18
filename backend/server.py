@@ -267,6 +267,19 @@ async def get_projects():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch projects: {str(e)}")
 
+# Test Replicate connection
+@app.get("/api/test-replicate")
+async def test_replicate():
+    try:
+        # Test with a simple model
+        result = replicate_client.run(
+            "meta/llama-2-7b-chat:8e6975e5ed6174911a6ff3d60540dfd4844201974602551e10e9e87ab143d81e",
+            input={"prompt": "Hello, this is a test from AI Filmmaking Platform"}
+        )
+        return {"success": True, "result": result}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
 # Get project by ID
 @app.get("/api/projects/{project_id}")
 async def get_project(project_id: str):
