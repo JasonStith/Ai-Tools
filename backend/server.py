@@ -54,7 +54,11 @@ client = AsyncIOMotorClient(os.getenv("MONGO_URL"))
 db = client[os.getenv("DATABASE_NAME")]
 
 # Replicate client
-replicate_client = replicate.Client(api_token=os.getenv("REPLICATE_API_TOKEN"))
+replicate_api_token = os.getenv("REPLICATE_API_TOKEN")
+if replicate_api_token:
+    replicate_client = replicate.Client(api_token=replicate_api_token)
+else:
+    replicate_client = None
 
 # Security
 security = HTTPBearer()
