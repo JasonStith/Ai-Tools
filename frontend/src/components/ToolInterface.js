@@ -36,7 +36,7 @@ const ToolInterface = ({ tool, onBack }) => {
         inputs: inputs
       });
       
-      setResult(response.data.result);
+      setResult(response.data);
     } catch (error) {
       console.error('Error executing tool:', error);
       setError(error.response?.data?.detail || 'Failed to execute tool');
