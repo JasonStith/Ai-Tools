@@ -325,10 +325,12 @@ async def get_project(project_id: str):
         executions = await db.executions.find({"project_id": project_id}).to_list(100)
         
         return {
-            "project": project,
-            "executions": executions
+            "project": serialize_doc(project),
+            "executions": serialize_doc(executions)
         }
         
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch project: {str(e)}")
 
