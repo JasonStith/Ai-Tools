@@ -60,8 +60,67 @@ if replicate_api_token:
 else:
     replicate_client = None
 
-# Security
-security = HTTPBearer()
+# Dummy data for demo purposes
+DUMMY_RESPONSES = {
+    "Script Writer": """FADE IN:
+
+EXT. COFFEE SHOP - DAY
+
+A bustling coffee shop with large windows. SARAH (28), a determined filmmaker, sits across from ALEX (30), a tech-savvy AI developer.
+
+SARAH
+(excitedly)
+This is incredible! With AI helping us create films, we can bring any story to life.
+
+ALEX
+(smiling)
+That's the vision. From script to screen, AI can handle the technical complexities while you focus on the creative story.
+
+SARAH
+(leaning forward)
+Show me what it can do.
+
+Alex opens a laptop, revealing the AI Filmmaking Platform interface.
+
+ALEX
+Pick any genre, any setting. Let's create something amazing together.
+
+SARAH
+(grinning)
+Science fiction. A world where humans and AI collaborate to explore the universe.
+
+ALEX
+(typing)
+Coming right up...
+
+FADE OUT.""",
+
+    "Character Builder": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDQwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjNjY2NmZmIDAlLCAjZGQ0NGZmIDUwJSwgIzAwYmJmZiAxMDAlKSIvPgo8Y2lyY2xlIGN4PSIyMDAiIGN5PSIxNTAiIHI9IjUwIiBmaWxsPSJ3aGl0ZSIgZmlsbC1vcGFjaXR5PSIwLjkiLz4KPHJlY3QgeD0iMTcwIiB5PSIyMDAiIHdpZHRoPSI2MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuOSIvPgo8dGV4dCB4PSIyMDAiIHk9IjM1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE2IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R2VuZXJhdGVkIENoYXJhY3RlcjwvdGV4dD4KPC9zdmc+",
+
+    "Environment Builder": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDQwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTgwZGVnLCAjMDA5OWZmIDAlLCAjNjZjY2ZmIDUwJSwgIzAwZmY5OSAxMDAlKSIvPgo8Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjMwIiBmaWxsPSIjZmZmZjAwIiBmaWxsLW9wYWNpdHk9IjAuOCIvPgo8cG9seWdvbiBwb2ludHM9IjUwLDM1MCAzNTAsMzUwIDIwMCwyMDAiIGZpbGw9IiMwMGZmMDAiIGZpbGwtb3BhY2l0eT0iMC43Ii8+Cjx0ZXh0IHg9IjIwMCIgeT0iMzgwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5HZW5lcmF0ZWQgRW52aXJvbm1lbnQ8L3RleHQ+Cjwvc3ZnPg==",
+
+    "Story Board Builder": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDQwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjZjNmNGY2Ii8+CjxyZWN0IHg9IjIwIiB5PSIyMCIgd2lkdGg9IjE3MCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlNWU3ZWIiIHN0cm9rZT0iIzk5YTNhNCIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxyZWN0IHg9IjIxMCIgeT0iMjAiIHdpZHRoPSIxNzAiIGhlaWdodD0iMTAwIiBmaWxsPSIjZTVlN2ViIiBzdHJva2U9IiM5OWEzYTQiIHN0cm9rZS13aWR0aD0iMiIvPgo8cmVjdCB4PSIyMCIgeT0iMTQwIiB3aWR0aD0iMTcwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2U1ZTdlYiIgc3Ryb2tlPSIjOTlhM2E0IiBzdHJva2Utd2lkdGg9IjIiLz4KPHJlY3QgeD0iMjEwIiB5PSIxNDAiIHdpZHRoPSIxNzAiIGhlaWdodD0iMTAwIiBmaWxsPSIjZTVlN2ViIiBzdHJva2U9IiM5OWEzYTQiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSIyMDAiIHk9IjMwMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE2IiBmaWxsPSIjNGE1NTY4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5HZW5lcmF0ZWQgU3RvcnlibGFyZDwvdGV4dD4KPC9zdmc+",
+
+    "Animation": "https://replicate.delivery/pbxt/dummy-animation-video.mp4",
+    
+    "Voices": "Generated voice audio would be available here. Sample: 'Welcome to the AI Filmmaking Platform, where creativity meets technology.'",
+    
+    "Lip Sync": "Lip sync animation would be generated here with synchronized mouth movements.",
+    
+    "Music": "🎵 Generated background music: Epic orchestral score with rising crescendo, perfect for sci-fi adventure scenes.",
+    
+    "SFX": "🔊 Generated sound effects: Futuristic beeping, whoosh sounds, and atmospheric ambiance.",
+    
+    "Titles": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDQwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjMTExODI3Ii8+Cjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMzYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5BSSBGSUxNPC90ZXh0Pgo8dGV4dCB4PSIyMDAiIHk9IjI0MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE4IiBmaWxsPSIjYWFhYWFhIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5UaGUgRnV0dXJlIG9mIEZpbG1tYWtpbmc8L3RleHQ+Cjwvc3ZnPg==",
+    
+    "VFX": "Visual effects would be applied here: particle systems, lighting effects, and post-processing filters.",
+    
+    "Editing": "Video editing complete: transitions added, color correction applied, final cut ready for export.",
+    
+    "Product": "Final product ready: 1080p MP4 video, optimized for web streaming and social media.",
+    
+    "Distribution": "Distribution ready: Video optimized for YouTube, Instagram, TikTok, and cinema formats."
+}
 
 # Models
 class ToolRequest(BaseModel):
