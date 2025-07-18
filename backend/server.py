@@ -214,6 +214,14 @@ async def execute_tool(request: ToolRequest):
             input=request.inputs
         )
         
+        # Handle different result types
+        if hasattr(result, '__iter__') and not isinstance(result, (str, bytes)):
+            # It's a generator or list, join the output
+            result = ''.join(str(item) for item in result)
+        elif not isinstance(result, (str, dict, list, int, float, bool)):
+            # Convert other types to string
+            result = str(result)
+        
         # Store result in database
         execution_record = {
             "id": str(uuid.uuid4()),
