@@ -264,6 +264,8 @@ async def execute_tool(request: ToolRequest):
             "execution_id": execution_record["id"]
         }
         
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Tool execution failed: {str(e)}")
 
