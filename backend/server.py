@@ -295,7 +295,8 @@ async def create_project(project: ProjectModel):
 async def get_projects():
     try:
         projects = await db.projects.find().to_list(100)
-        return {"projects": projects}
+        serialized_projects = serialize_doc(projects)
+        return {"projects": serialized_projects}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch projects: {str(e)}")
 
