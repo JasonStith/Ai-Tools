@@ -73,6 +73,7 @@ const BrainstormIdeas = ({ onBack }) => {
   ];
 
   const generateIdeas = async (mood = 'general') => {
+    setLoading(true);
     try {
       const response = await axios.post(`${backendUrl}/api/tools/execute`, {
         tool_name: 'Brainstorm Ideas',
@@ -90,14 +91,34 @@ const BrainstormIdeas = ({ onBack }) => {
         content: ideas,
         x: Math.random() * 400 + 100,
         y: Math.random() * 300 + 100,
-        width: 280,
-        height: 200,
+        width: 320,
+        height: 240,
         color: 'bg-yellow-200'
       };
 
       setCanvasItems(prev => [...prev, newNote]);
+      
+      // If we're in boards view, switch to canvas to show the result
+      if (currentView === 'boards') {
+        setSelectedBoard({ id: 'generated', name: `${mood.charAt(0).toUpperCase() + mood.slice(1)} Ideas` });
+        setCurrentView('canvas');
+      }
     } catch (error) {
       console.error('Error generating ideas:', error);
+      // Add error note instead
+      const errorNote = {
+        id: Date.now(),
+        type: 'note',
+        content: 'Sorry, there was an error generating ideas. Please try again or add your own ideas manually.',
+        x: Math.random() * 400 + 100,
+        y: Math.random() * 300 + 100,
+        width: 280,
+        height: 120,
+        color: 'bg-red-200'
+      };
+      setCanvasItems(prev => [...prev, errorNote]);
+    } finally {
+      setLoading(false);
     }
   };
 
