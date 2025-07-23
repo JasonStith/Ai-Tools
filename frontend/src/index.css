@@ -28,18 +28,18 @@
     position: absolute;
     inset: 0;
     padding: 1px;
-    background: linear-gradient(45deg, #3b82f6, #d946ef, #06b6d4);
+    background: linear-gradient(45deg, #d946ef, #f97316, #06b6d4);
     border-radius: inherit;
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask-composite: exclude;
   }
   
   .tool-card {
-    @apply bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200;
+    @apply bg-dark-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-700 hover:border-primary-500/50;
   }
   
   .tool-card:hover {
-    @apply shadow-2xl;
+    @apply shadow-2xl shadow-primary-500/20;
   }
   
   .category-badge {
@@ -47,27 +47,27 @@
   }
   
   .category-pre-production {
-    @apply bg-blue-100 text-blue-800;
+    @apply bg-blue-500/20 text-blue-300 border border-blue-500/30;
   }
   
   .category-production {
-    @apply bg-green-100 text-green-800;
+    @apply bg-green-500/20 text-green-300 border border-green-500/30;
   }
   
   .category-post-production {
-    @apply bg-purple-100 text-purple-800;
+    @apply bg-purple-500/20 text-purple-300 border border-purple-500/30;
   }
   
   .category-distribution {
-    @apply bg-orange-100 text-orange-800;
+    @apply bg-orange-500/20 text-orange-300 border border-orange-500/30;
   }
   
   .btn-primary {
-    @apply bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105;
+    @apply bg-gradient-to-r from-primary-500 to-accent-500 hover:from-primary-600 hover:to-accent-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg;
   }
   
   .btn-secondary {
-    @apply bg-white hover:bg-gray-50 text-gray-900 font-medium py-2 px-4 rounded-lg border border-gray-200 transition-all duration-200 transform hover:scale-105;
+    @apply bg-dark-800 hover:bg-dark-700 text-gray-300 hover:text-white font-medium py-2 px-4 rounded-lg border border-gray-700 hover:border-gray-600 transition-all duration-200 transform hover:scale-105;
   }
 }
 
