@@ -6,7 +6,7 @@ Quick test for the fixed endpoints
 import requests
 import json
 
-BACKEND_URL = "https://01e4ef71-7816-448b-b0d5-26374402f1e5.preview.emergentagent.com/api"
+BACKEND_URL = "https://5b948487-4ac8-4df0-81a6-d13e8aa6f2bc.preview.emergentagent.com/api"
 
 def test_fixed_endpoints():
     print("🔧 Testing Fixed Endpoints...")
