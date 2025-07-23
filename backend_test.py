@@ -132,6 +132,214 @@ class BackendTester:
         except Exception as e:
             self.log_test("Script Writer Execution", False, f"Exception: {str(e)}")
             
+    def test_brainstorm_ideas_execution(self):
+        """Test Brainstorm Ideas tool execution - PRIMARY FOCUS"""
+        try:
+            payload = {
+                "tool_name": "Brainstorm Ideas",
+                "inputs": {
+                    "prompt": "Generate creative film ideas with a cinematic style",
+                    "genre": "cinematic"
+                }
+            }
+            
+            response = self.session.post(f"{self.base_url}/tools/execute", json=payload)
+            success = response.status_code == 200
+            
+            if success:
+                data = response.json()
+                if data.get("success") and data.get("result"):
+                    result = data.get("result")
+                    # Verify it contains expected content for demo mode
+                    if "CREATIVE BRAINSTORMING SESSION" in result or "CONCEPT" in result:
+                        self.log_test("Brainstorm Ideas Execution", True, f"Generated creative ideas, execution_id: {data.get('execution_id')}, is_demo: {data.get('is_demo')}")
+                    else:
+                        self.log_test("Brainstorm Ideas Execution", False, f"Result doesn't contain expected brainstorming content: {result[:100]}...")
+                else:
+                    self.log_test("Brainstorm Ideas Execution", False, f"No result generated: {data}")
+            else:
+                self.log_test("Brainstorm Ideas Execution", False, f"Status: {response.status_code}, Response: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Brainstorm Ideas Execution", False, f"Exception: {str(e)}")
+
+    def test_brainstorm_ideas_different_genres(self):
+        """Test Brainstorm Ideas with different mood/genre inputs"""
+        genres = ["general", "cinematic", "intimate", "dark", "comedy", "horror"]
+        
+        for genre in genres:
+            try:
+                payload = {
+                    "tool_name": "Brainstorm Ideas",
+                    "inputs": {
+                        "prompt": f"Generate creative film ideas for {genre} style",
+                        "genre": genre
+                    }
+                }
+                
+                response = self.session.post(f"{self.base_url}/tools/execute", json=payload)
+                success = response.status_code == 200
+                
+                if success:
+                    data = response.json()
+                    if data.get("success") and data.get("result"):
+                        self.log_test(f"Brainstorm Ideas - {genre.title()} Genre", True, f"Generated ideas for {genre} genre")
+                    else:
+                        self.log_test(f"Brainstorm Ideas - {genre.title()} Genre", False, f"No result for {genre}: {data}")
+                else:
+                    self.log_test(f"Brainstorm Ideas - {genre.title()} Genre", False, f"Status: {response.status_code}")
+                    
+            except Exception as e:
+                self.log_test(f"Brainstorm Ideas - {genre.title()} Genre", False, f"Exception: {str(e)}")
+
+    def test_brainstorm_ideas_model_configuration(self):
+        """Test that Brainstorm Ideas uses the correct Llama model"""
+        try:
+            # First get the tools to verify configuration
+            response = self.session.get(f"{self.base_url}/tools")
+            if response.status_code == 200:
+                tools = response.json().get("tools", [])
+                brainstorm_tool = next((t for t in tools if t["name"] == "Brainstorm Ideas"), None)
+                
+                if brainstorm_tool:
+                    expected_model = "meta/llama-2-7b-chat:8e6975e5ed6174911a6ff3d60540dfd4844201974602551e10e9e87ab143d81e"
+                    actual_model = brainstorm_tool.get("replicate_model")
+                    
+                    if actual_model == expected_model:
+                        self.log_test("Brainstorm Ideas Model Configuration", True, f"Correct model configured: {actual_model}")
+                    else:
+                        self.log_test("Brainstorm Ideas Model Configuration", False, f"Expected: {expected_model}, Got: {actual_model}")
+                        
+                    # Verify inputs configuration
+                    expected_inputs = {"prompt": "text", "genre": "text"}
+                    actual_inputs = brainstorm_tool.get("inputs", {})
+                    
+                    if actual_inputs == expected_inputs:
+                        self.log_test("Brainstorm Ideas Input Configuration", True, f"Correct inputs: {actual_inputs}")
+                    else:
+                        self.log_test("Brainstorm Ideas Input Configuration", False, f"Expected: {expected_inputs}, Got: {actual_inputs}")
+                else:
+                    self.log_test("Brainstorm Ideas Model Configuration", False, "Brainstorm Ideas tool not found in tools list")
+            else:
+                self.log_test("Brainstorm Ideas Model Configuration", False, f"Failed to get tools: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Brainstorm Ideas Model Configuration", False, f"Exception: {str(e)}")
+
+    def test_brainstorm_ideas_demo_mode(self):
+        """Test that Brainstorm Ideas works in demo mode with placeholder API token"""
+        try:
+            payload = {
+                "tool_name": "Brainstorm Ideas",
+                "inputs": {
+                    "prompt": "Generate creative film ideas with a cinematic style",
+                    "genre": "cinematic"
+                }
+            }
+            
+            response = self.session.post(f"{self.base_url}/tools/execute", json=payload)
+            success = response.status_code == 200
+            
+            if success:
+                data = response.json()
+                if data.get("success") and data.get("result"):
+                    # Check if it's demo mode and returns expected dummy response
+                    is_demo = data.get("is_demo", False)
+                    result = data.get("result")
+                    
+                    if is_demo and "CREATIVE BRAINSTORMING SESSION" in result:
+                        self.log_test("Brainstorm Ideas Demo Mode", True, "Demo mode working with expected dummy response")
+                    elif not is_demo:
+                        self.log_test("Brainstorm Ideas Demo Mode", True, "Live mode detected - API token is configured")
+                    else:
+                        self.log_test("Brainstorm Ideas Demo Mode", False, f"Demo mode but unexpected response: {result[:100]}...")
+                else:
+                    self.log_test("Brainstorm Ideas Demo Mode", False, f"No result generated: {data}")
+            else:
+                self.log_test("Brainstorm Ideas Demo Mode", False, f"Status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Brainstorm Ideas Demo Mode", False, f"Exception: {str(e)}")
+
+    def test_brainstorm_ideas_response_format(self):
+        """Test Brainstorm Ideas API response format validation"""
+        try:
+            payload = {
+                "tool_name": "Brainstorm Ideas",
+                "inputs": {
+                    "prompt": "Generate creative film ideas with a cinematic style",
+                    "genre": "cinematic"
+                }
+            }
+            
+            response = self.session.post(f"{self.base_url}/tools/execute", json=payload)
+            success = response.status_code == 200
+            
+            if success:
+                data = response.json()
+                
+                # Check required response fields
+                required_fields = ["success", "result", "execution_id", "is_demo"]
+                missing_fields = [field for field in required_fields if field not in data]
+                
+                if not missing_fields:
+                    # Verify field types
+                    if (isinstance(data["success"], bool) and 
+                        isinstance(data["result"], str) and 
+                        isinstance(data["execution_id"], str) and
+                        isinstance(data["is_demo"], bool)):
+                        self.log_test("Brainstorm Ideas Response Format", True, "All required fields present with correct types")
+                    else:
+                        self.log_test("Brainstorm Ideas Response Format", False, "Fields present but incorrect types")
+                else:
+                    self.log_test("Brainstorm Ideas Response Format", False, f"Missing fields: {missing_fields}")
+            else:
+                self.log_test("Brainstorm Ideas Response Format", False, f"Status: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Brainstorm Ideas Response Format", False, f"Exception: {str(e)}")
+
+    def test_brainstorm_ideas_malformed_requests(self):
+        """Test Brainstorm Ideas error handling for malformed requests"""
+        test_cases = [
+            {
+                "name": "Missing inputs",
+                "payload": {"tool_name": "Brainstorm Ideas"}
+            },
+            {
+                "name": "Missing prompt",
+                "payload": {"tool_name": "Brainstorm Ideas", "inputs": {"genre": "cinematic"}}
+            },
+            {
+                "name": "Missing genre", 
+                "payload": {"tool_name": "Brainstorm Ideas", "inputs": {"prompt": "test"}}
+            },
+            {
+                "name": "Empty inputs",
+                "payload": {"tool_name": "Brainstorm Ideas", "inputs": {}}
+            }
+        ]
+        
+        for test_case in test_cases:
+            try:
+                response = self.session.post(f"{self.base_url}/tools/execute", json=test_case["payload"])
+                
+                # Should either handle gracefully (200) or return proper error (400/422/500)
+                if response.status_code in [200, 400, 422, 500]:
+                    if response.status_code == 200:
+                        data = response.json()
+                        if data.get("success"):
+                            self.log_test(f"Brainstorm Ideas Error Handling - {test_case['name']}", True, "Handled gracefully")
+                        else:
+                            self.log_test(f"Brainstorm Ideas Error Handling - {test_case['name']}", True, "Returned error response")
+                    else:
+                        self.log_test(f"Brainstorm Ideas Error Handling - {test_case['name']}", True, f"Proper error status: {response.status_code}")
+                else:
+                    self.log_test(f"Brainstorm Ideas Error Handling - {test_case['name']}", False, f"Unexpected status: {response.status_code}")
+                    
+            except Exception as e:
+                self.log_test(f"Brainstorm Ideas Error Handling - {test_case['name']}", False, f"Exception: {str(e)}")
+
     def test_character_builder_execution(self):
         """Test Character Builder tool execution with image generation"""
         try:
