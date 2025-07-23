@@ -63,13 +63,13 @@ const ToolsGallery = ({ onToolSelect }) => {
   }
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-dark-900">
       {/* Header */}
       <div className="text-center mb-16">
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-4xl md:text-5xl font-bold text-gray-900 mb-6"
+          className="text-4xl md:text-5xl font-bold text-white mb-6"
         >
           AI Filmmaking Tools
         </motion.h2>
@@ -77,7 +77,7 @@ const ToolsGallery = ({ onToolSelect }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-xl text-gray-600 max-w-3xl mx-auto"
+          className="text-xl text-gray-300 max-w-3xl mx-auto"
         >
           Explore our comprehensive suite of AI-powered tools designed to streamline your filmmaking process
         </motion.p>
@@ -91,8 +91,8 @@ const ToolsGallery = ({ onToolSelect }) => {
             onClick={() => setSelectedCategory(category.id)}
             className={`flex items-center space-x-2 px-6 py-3 rounded-full transition-all duration-200 ${
               selectedCategory === category.id
-                ? 'bg-blue-600 text-white shadow-lg'
-                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                ? 'bg-gradient-to-r from-primary-500 to-accent-500 text-white shadow-lg'
+                : 'bg-dark-800 text-gray-300 hover:bg-dark-700 hover:text-white border border-gray-700'
             }`}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -111,7 +111,7 @@ const ToolsGallery = ({ onToolSelect }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="tool-card p-6 cursor-pointer"
+            className="bg-dark-800 rounded-2xl p-6 cursor-pointer border border-gray-700 hover:border-primary-500/50 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary-500/20"
             onClick={() => onToolSelect(tool)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -123,11 +123,11 @@ const ToolsGallery = ({ onToolSelect }) => {
               </span>
             </div>
             
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <h3 className="text-xl font-semibold text-white mb-2">
               {tool.name}
             </h3>
             
-            <p className="text-gray-600 mb-4 text-sm">
+            <p className="text-gray-400 mb-4 text-sm">
               {tool.description}
             </p>
             
@@ -136,7 +136,7 @@ const ToolsGallery = ({ onToolSelect }) => {
                 Powered by Replicate
               </span>
               <motion.button
-                className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                className="text-primary-400 hover:text-primary-300 font-medium text-sm"
                 whileHover={{ scale: 1.05 }}
               >
                 Try Now →
@@ -148,7 +148,7 @@ const ToolsGallery = ({ onToolSelect }) => {
 
       {filteredTools.length === 0 && (
         <div className="text-center py-16">
-          <p className="text-gray-500 text-lg">No tools found in this category.</p>
+          <p className="text-gray-400 text-lg">No tools found in this category.</p>
         </div>
       )}
     </section>
