@@ -547,6 +547,18 @@ class BackendTester:
         
         # Tool Execution Tests
         print("\n🔧 Testing Tool Execution...")
+        
+        # Brainstorm Ideas - PRIMARY FOCUS
+        print("\n💡 Testing Brainstorm Ideas Module (PRIMARY FOCUS)...")
+        self.test_brainstorm_ideas_execution()
+        self.test_brainstorm_ideas_different_genres()
+        self.test_brainstorm_ideas_model_configuration()
+        self.test_brainstorm_ideas_demo_mode()
+        self.test_brainstorm_ideas_response_format()
+        self.test_brainstorm_ideas_malformed_requests()
+        
+        # Other Tool Tests
+        print("\n🎬 Testing Other Tools...")
         self.test_script_writer_execution()
         self.test_character_builder_execution()
         self.test_invalid_tool_execution()
