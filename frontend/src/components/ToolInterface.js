@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 import MusicStudio from './MusicStudio';
+import ScriptWriter from './ScriptWriter';
 
 const ToolInterface = ({ tool, onBack }) => {
   const [inputs, setInputs] = useState({});
@@ -13,6 +14,11 @@ const ToolInterface = ({ tool, onBack }) => {
   // If it's the Music tool, render the dedicated Music Studio
   if (tool.name === 'Music') {
     return <MusicStudio onBack={onBack} />;
+  }
+
+  // If it's the Script Writer tool, render the dedicated Script Writer
+  if (tool.name === 'Script Writer') {
+    return <ScriptWriter onBack={onBack} />;
   }
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
