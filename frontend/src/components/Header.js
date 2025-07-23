@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 
 const Header = ({ currentView, onViewChange }) => {
   const navItems = [
-    { id: 'home', label: 'Home', icon: '🏠' },
-    { id: 'projects', label: 'Projects', icon: '📂' },
-    { id: 'gallery', label: 'Gallery', icon: '🎨' },
-    { id: 'community', label: 'Community', icon: '👥' },
+    { id: 'home', label: 'Home' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'gallery', label: 'Gallery' },
+    { id: 'community', label: 'Community' },
   ];
 
   return (
@@ -31,16 +31,28 @@ const Header = ({ currentView, onViewChange }) => {
               <motion.button
                 key={item.id}
                 onClick={() => onViewChange(item.id)}
-                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 ${
+                className={`relative px-3 py-2 font-medium transition-all duration-200 ${
                   currentView === item.id
-                    ? 'bg-primary-600/20 text-primary-400'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                    ? 'text-white'
+                    : 'text-gray-400 hover:text-white'
                 }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <span>{item.icon}</span>
-                <span className="font-medium">{item.label}</span>
+                <span>{item.label}</span>
+                {/* Adobe Firefly style underline */}
+                {currentView === item.id && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-white rounded-full"
+                    initial={false}
+                    transition={{
+                      type: "spring",
+                      stiffness: 500,
+                      damping: 30
+                    }}
+                  />
+                )}
               </motion.button>
             ))}
           </nav>
@@ -66,6 +78,7 @@ const Header = ({ currentView, onViewChange }) => {
       </div>
     </header>
   );
+};
 };
 
 export default Header;
