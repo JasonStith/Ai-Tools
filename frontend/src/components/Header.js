@@ -79,6 +79,5 @@ const Header = ({ currentView, onViewChange }) => {
     </header>
   );
 };
-};
 
 export default Header;
