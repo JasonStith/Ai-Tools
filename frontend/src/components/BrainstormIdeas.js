@@ -62,6 +62,50 @@ const BrainstormIdeas = ({ onBack }) => {
     }
   };
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      if (currentView === 'canvas' && !e.target.matches('input, textarea')) {
+        switch (e.key) {
+          case '1':
+            setSelectedTool('note');
+            setIsAddingItem(true);
+            break;
+          case '2':
+            setSelectedTool('text');
+            setIsAddingItem(true);
+            break;
+          case '3':
+            setSelectedTool('image');
+            setIsAddingItem(true);
+            break;
+          case '4':
+            setSelectedTool('link');
+            setIsAddingItem(true);
+            break;
+          case '5':
+            setSelectedTool('video');
+            setIsAddingItem(true);
+            break;
+          case 'Escape':
+            setIsAddingItem(false);
+            break;
+          case 'Delete':
+          case 'Backspace':
+            if (e.ctrlKey) {
+              setCanvasItems([]);
+            }
+            break;
+          default:
+            break;
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [currentView]);
+
   // Load data when board changes
   useEffect(() => {
     if (selectedBoard && currentView === 'canvas') {
