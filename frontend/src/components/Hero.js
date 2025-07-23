@@ -16,19 +16,9 @@ const Hero = () => {
           className="space-y-8"
         >
           <div className="space-y-4">
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-lg md:text-xl text-pink-200 font-medium"
-            >
-              Generate films, audio, and now — complete stories
-            </motion.p>
-            
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
-              Explore new ways to
-              <span className="block bg-gradient-to-r from-pink-400 via-purple-300 to-orange-300 bg-clip-text text-transparent">
-                create
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight">
+              <span className="bg-gradient-to-r from-pink-400 via-purple-300 to-orange-300 bg-clip-text text-transparent">
+                Imagine
               </span>
             </h1>
           </div>
