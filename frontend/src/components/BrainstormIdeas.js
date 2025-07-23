@@ -9,6 +9,7 @@ const BrainstormIdeas = ({ onBack }) => {
   const [canvasItems, setCanvasItems] = useState([]);
   const [selectedTool, setSelectedTool] = useState('note');
   const [isAddingItem, setIsAddingItem] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const canvasRef = useRef(null);
   const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
