@@ -18,7 +18,7 @@ const Hero = () => {
           <div className="space-y-4">
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight">
               <span className="bg-gradient-to-r from-pink-400 via-purple-300 to-orange-300 bg-clip-text text-transparent">
-                Image.
+                Imagine.
               </span>
               <span className="text-white">
                 {' '}Your story
