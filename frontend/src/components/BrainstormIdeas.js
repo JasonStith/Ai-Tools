@@ -498,16 +498,12 @@ const DraggableItem = ({ item, setCanvasItems }) => {
   const [content, setContent] = useState(item.content);
   const [isDragging, setIsDragging] = useState(false);
 
-  const { x, y } = useDrag({
-    from: { x: item.x, y: item.y },
-    bounds: { left: 0, top: 0, right: 2000, bottom: 2000 },
-    onStart: () => setIsDragging(true),
-    onEnd: () => setIsDragging(false)
-  });
-
-  const updatePosition = () => {
+  const updatePosition = (event, info) => {
+    const newX = item.x + info.offset.x;
+    const newY = item.y + info.offset.y;
+    
     setCanvasItems(prev => prev.map(i => 
-      i.id === item.id ? { ...i, x: x.get(), y: y.get() } : i
+      i.id === item.id ? { ...i, x: Math.max(0, newX), y: Math.max(0, newY) } : i
     ));
   };
 
@@ -537,17 +533,22 @@ const DraggableItem = ({ item, setCanvasItems }) => {
     <motion.div
       drag
       dragMomentum={false}
-      onDragEnd={updatePosition}
+      dragConstraints={{ left: 0, top: 0, right: 1000, bottom: 800 }}
+      onDragStart={() => setIsDragging(true)}
+      onDragEnd={(event, info) => {
+        setIsDragging(false);
+        updatePosition(event, info);
+      }}
       className={`absolute ${item.color} rounded-lg shadow-lg border-2 ${
         isDragging ? 'border-blue-400 shadow-xl' : 'border-gray-300'
       } cursor-move group transition-all duration-200`}
       style={{
-        x,
-        y,
+        left: item.x,
+        top: item.y,
         width: item.width,
         height: item.height
       }}
-      whileHover={{ scale: 1.02, shadow: "0 8px 30px rgba(0,0,0,0.12)" }}
+      whileHover={{ scale: 1.02, boxShadow: "0 8px 30px rgba(0,0,0,0.12)" }}
       whileDrag={{ scale: 1.05, zIndex: 1000, rotate: 2 }}
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
