@@ -62,6 +62,36 @@ else:
 
 # Dummy data for demo purposes
 DUMMY_RESPONSES = {
+    "Brainstorm Ideas": """🎬 CREATIVE BRAINSTORMING SESSION 💡
+
+Here are some compelling film concepts and ideas:
+
+**CONCEPT 1: "The Memory Architect"**
+- Genre: Sci-Fi Thriller
+- Logline: A neuroscientist discovers she can edit memories, but when she tries to erase her own trauma, she uncovers a conspiracy that threatens reality itself.
+- Visual Style: Neo-noir with holographic elements
+- Target Audience: Adult, fans of Black Mirror and Inception
+
+**CONCEPT 2: "Last Stop Diner"**
+- Genre: Supernatural Drama
+- Logline: A mysterious 24-hour diner appears to people at crossroads in their lives, serving more than just coffee—it serves second chances.
+- Visual Style: Warm, nostalgic Americana with magical realism
+- Target Audience: Universal appeal, heartwarming yet mysterious
+
+**CONCEPT 3: "Digital Ghosts"**
+- Genre: Horror/Tech Thriller
+- Logline: When a social media influencer inherits her grandmother's house, she discovers the elderly woman has been livestreaming her afterlife.
+- Visual Style: Found footage meets traditional cinematography
+- Target Audience: Young adults, horror enthusiasts
+
+**DEVELOPMENT SUGGESTIONS:**
+- Consider character arcs that reflect modern anxieties
+- Explore themes of technology vs. humanity
+- Think about practical locations and budget-friendly effects
+- Develop unique visual languages for each concept
+
+Which concept resonates most with your vision? I can help develop any of these further!""",
+
     "Script Writer": """FADE IN:
 
 EXT. COFFEE SHOP - DAY
@@ -119,7 +149,9 @@ FADE OUT.""",
     
     "Product": "Final product ready: 1080p MP4 video, optimized for web streaming and social media.",
     
-    "Distribution": "Distribution ready: Video optimized for YouTube, Instagram, TikTok, and cinema formats."
+    "Distribution": "Distribution ready: Video optimized for YouTube, Instagram, TikTok, and cinema formats.",
+
+    "Torch Builder": "AI model configuration complete: Custom settings applied, training parameters optimized, model ready for fine-tuning and deployment."
 }
 
 # Models
