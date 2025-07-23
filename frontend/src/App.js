@@ -71,6 +71,10 @@ function App() {
             currentProject={currentProject}
           />
         )}
+
+        {currentView === 'gallery' && (
+          <Gallery />
+        )}
         
         {currentView === 'tool' && selectedTool && (
           <ToolInterface 
