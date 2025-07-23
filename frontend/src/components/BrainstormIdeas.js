@@ -122,6 +122,7 @@ const BrainstormIdeas = ({ onBack }) => {
     }
   };
 
+  // Enhanced Add Canvas Item function
   const addCanvasItem = (e) => {
     if (!isAddingItem) return;
     
@@ -132,12 +133,18 @@ const BrainstormIdeas = ({ onBack }) => {
     const newItem = {
       id: Date.now(),
       type: selectedTool,
-      x: x - 50,
-      y: y - 25,
-      width: selectedTool === 'note' ? 200 : selectedTool === 'text' ? 250 : 150,
-      height: selectedTool === 'note' ? 120 : selectedTool === 'text' ? 80 : 100,
-      content: selectedTool === 'note' ? 'New idea...' : selectedTool === 'text' ? 'Add text here...' : '',
-      color: selectedTool === 'note' ? 'bg-yellow-200' : selectedTool === 'text' ? 'bg-white' : 'bg-blue-100'
+      x: Math.max(0, x - 100),
+      y: Math.max(0, y - 50),
+      width: selectedTool === 'note' ? 240 : selectedTool === 'text' ? 280 : selectedTool === 'image' ? 200 : 180,
+      height: selectedTool === 'note' ? 160 : selectedTool === 'text' ? 60 : selectedTool === 'image' ? 150 : 120,
+      content: selectedTool === 'note' ? 'Click to add your ideas...' : 
+               selectedTool === 'text' ? 'Your text here...' : 
+               selectedTool === 'link' ? 'https://example.com' : '',
+      color: selectedTool === 'note' ? 'bg-yellow-200' : 
+             selectedTool === 'text' ? 'bg-white' : 
+             selectedTool === 'image' ? 'bg-blue-100' :
+             selectedTool === 'link' ? 'bg-purple-100' :
+             'bg-red-100'
     };
 
     setCanvasItems(prev => [...prev, newItem]);
