@@ -5,6 +5,7 @@ import Hero from './components/Hero';
 import ToolsGallery from './components/ToolsGallery';
 import ProjectDashboard from './components/ProjectDashboard';
 import ToolInterface from './components/ToolInterface';
+import Gallery from './components/Gallery';
 import './App.css';
 
 function App() {
