@@ -6,12 +6,18 @@ import MusicStudio from './MusicStudio';
 import ScriptWriter from './ScriptWriter';
 import CharacterBuilder from './CharacterBuilder';
 import StoryboardBuilder from './StoryboardBuilder';
+import BrainstormIdeas from './BrainstormIdeas';
 
 const ToolInterface = ({ tool, onBack }) => {
   const [inputs, setInputs] = useState({});
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // If it's the Brainstorm Ideas tool, render the dedicated Brainstorm Ideas module
+  if (tool.name === 'Brainstorm Ideas') {
+    return <BrainstormIdeas onBack={onBack} />;
+  }
 
   // If it's the Music tool, render the dedicated Music Studio
   if (tool.name === 'Music') {
