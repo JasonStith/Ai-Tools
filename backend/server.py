@@ -288,20 +288,20 @@ AI_TOOLS = [
         "icon": "📦"
     },
     {
+        "name": "Torch Builder",
+        "category": "Distribution",
+        "description": "Build and configure AI models and settings",
+        "replicate_model": "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
+        "inputs": {"prompt": "text", "negative_prompt": "text"},
+        "icon": "🔧"
+    },
+    {
         "name": "Distribution",
         "category": "Distribution",
         "description": "Optimize and prepare for various platforms",
         "replicate_model": "stability-ai/stable-video-diffusion:3f0457e4619daac51203dedb1a4c069c4c2f5b9bab8c0bb78c1d0b8d6ab77e0c",
         "inputs": {"video": "video", "platform": "text"},
         "icon": "🌐"
-    },
-    {
-        "name": "Torch Builder",
-        "category": "Pre-Production",
-        "description": "Build and configure AI models and settings",
-        "replicate_model": "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
-        "inputs": {"prompt": "text", "negative_prompt": "text"},
-        "icon": "🔧"
     }
 ]
 
