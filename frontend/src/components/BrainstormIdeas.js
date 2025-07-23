@@ -492,14 +492,17 @@ const BrainstormIdeas = ({ onBack }) => {
   );
 };
 
-// Draggable Canvas Item Component
+// Enhanced Draggable Canvas Item Component
 const DraggableItem = ({ item, setCanvasItems }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [content, setContent] = useState(item.content);
+  const [isDragging, setIsDragging] = useState(false);
 
   const { x, y } = useDrag({
     from: { x: item.x, y: item.y },
-    bounds: { left: 0, top: 0, right: 2000, bottom: 2000 }
+    bounds: { left: 0, top: 0, right: 2000, bottom: 2000 },
+    onStart: () => setIsDragging(true),
+    onEnd: () => setIsDragging(false)
   });
 
   const updatePosition = () => {
@@ -509,9 +512,11 @@ const DraggableItem = ({ item, setCanvasItems }) => {
   };
 
   const updateContent = () => {
-    setCanvasItems(prev => prev.map(i => 
-      i.id === item.id ? { ...i, content } : i
-    ));
+    if (content.trim()) {
+      setCanvasItems(prev => prev.map(i => 
+        i.id === item.id ? { ...i, content: content.trim() } : i
+      ));
+    }
     setIsEditing(false);
   };
 
@@ -519,30 +524,54 @@ const DraggableItem = ({ item, setCanvasItems }) => {
     setCanvasItems(prev => prev.filter(i => i.id !== item.id));
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && e.ctrlKey) {
+      updateContent();
+    } else if (e.key === 'Escape') {
+      setContent(item.content);
+      setIsEditing(false);
+    }
+  };
+
   return (
     <motion.div
       drag
       dragMomentum={false}
       onDragEnd={updatePosition}
-      className={`absolute ${item.color} rounded-lg shadow-md border border-gray-300 cursor-move group`}
+      className={`absolute ${item.color} rounded-lg shadow-lg border-2 ${
+        isDragging ? 'border-blue-400 shadow-xl' : 'border-gray-300'
+      } cursor-move group transition-all duration-200`}
       style={{
         x,
         y,
         width: item.width,
         height: item.height
       }}
-      whileHover={{ scale: 1.02 }}
-      whileDrag={{ scale: 1.05, zIndex: 1000 }}
+      whileHover={{ scale: 1.02, shadow: "0 8px 30px rgba(0,0,0,0.12)" }}
+      whileDrag={{ scale: 1.05, zIndex: 1000, rotate: 2 }}
+      initial={{ scale: 0, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
-      {/* Delete Button */}
-      <button
-        onClick={deleteItem}
-        className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs"
-      >
-        ×
-      </button>
+      {/* Enhanced Control Buttons */}
+      <div className="absolute -top-3 -right-3 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <button
+          onClick={deleteItem}
+          className="w-7 h-7 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-sm shadow-md transition-colors"
+          title="Delete item"
+        >
+          ×
+        </button>
+        <button
+          onClick={() => setIsEditing(true)}
+          className="w-7 h-7 bg-blue-500 hover:bg-blue-600 text-white rounded-full flex items-center justify-center text-xs shadow-md transition-colors"
+          title="Edit content"
+        >
+          ✏️
+        </button>
+      </div>
 
-      <div className="p-3 h-full">
+      <div className="p-4 h-full">
         {item.type === 'note' && (
           <div className="h-full">
             {isEditing ? (
@@ -550,16 +579,18 @@ const DraggableItem = ({ item, setCanvasItems }) => {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 onBlur={updateContent}
-                onKeyDown={(e) => e.key === 'Enter' && e.ctrlKey && updateContent()}
-                className="w-full h-full resize-none border-none outline-none bg-transparent text-sm"
+                onKeyDown={handleKeyDown}
+                className="w-full h-full resize-none border-none outline-none bg-transparent text-sm leading-relaxed"
+                placeholder="Enter your ideas here..."
                 autoFocus
               />
             ) : (
               <div
                 onClick={() => setIsEditing(true)}
-                className="h-full text-sm text-gray-800 cursor-text overflow-hidden"
+                className="h-full text-sm text-gray-800 cursor-text overflow-auto leading-relaxed whitespace-pre-wrap"
+                title="Click to edit"
               >
-                {item.content}
+                {item.content || 'Click to add content...'}
               </div>
             )}
           </div>
@@ -573,26 +604,54 @@ const DraggableItem = ({ item, setCanvasItems }) => {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 onBlur={updateContent}
-                onKeyDown={(e) => e.key === 'Enter' && updateContent()}
+                onKeyDown={handleKeyDown}
                 className="w-full h-full border-none outline-none bg-transparent text-sm font-medium"
+                placeholder="Enter text..."
                 autoFocus
               />
             ) : (
               <div
                 onClick={() => setIsEditing(true)}
                 className="h-full text-sm font-medium text-gray-800 cursor-text flex items-center"
+                title="Click to edit"
               >
-                {item.content}
+                {item.content || 'Click to add text...'}
               </div>
             )}
           </div>
         )}
 
         {item.type === 'image' && (
-          <div className="h-full bg-gray-200 rounded flex items-center justify-center">
-            <span className="text-2xl">🖼️</span>
+          <div className="h-full bg-gradient-to-br from-gray-100 to-gray-200 rounded flex items-center justify-center border-2 border-dashed border-gray-300">
+            <div className="text-center">
+              <span className="text-4xl mb-2 block">🖼️</span>
+              <span className="text-xs text-gray-600">Image placeholder</span>
+            </div>
           </div>
         )}
+
+        {item.type === 'link' && (
+          <div className="h-full bg-gradient-to-br from-purple-100 to-purple-200 rounded flex items-center justify-center border-2 border-dashed border-purple-300">
+            <div className="text-center">
+              <span className="text-4xl mb-2 block">🔗</span>
+              <span className="text-xs text-purple-700">Link placeholder</span>
+            </div>
+          </div>
+        )}
+
+        {item.type === 'video' && (
+          <div className="h-full bg-gradient-to-br from-red-100 to-red-200 rounded flex items-center justify-center border-2 border-dashed border-red-300">
+            <div className="text-center">
+              <span className="text-4xl mb-2 block">🎥</span>
+              <span className="text-xs text-red-700">Video placeholder</span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Item Type Indicator */}
+      <div className="absolute bottom-1 right-1 opacity-30 text-xs">
+        {item.type}
       </div>
     </motion.div>
   );
