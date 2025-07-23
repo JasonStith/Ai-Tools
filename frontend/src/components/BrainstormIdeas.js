@@ -6,13 +6,68 @@ const BrainstormIdeas = ({ onBack }) => {
   const [currentView, setCurrentView] = useState('boards'); // 'boards' or 'canvas'
   const [selectedBoard, setSelectedBoard] = useState(null);
   const [boards, setBoards] = useState([]);
+  // Enhanced state management with persistence
   const [canvasItems, setCanvasItems] = useState([]);
   const [selectedTool, setSelectedTool] = useState('note');
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [saveStatus, setSaveStatus] = useState('saved'); // 'saved', 'saving', 'unsaved'
 
   const canvasRef = useRef(null);
   const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+
+  // Auto-save functionality
+  useEffect(() => {
+    if (canvasItems.length > 0 && currentView === 'canvas') {
+      setSaveStatus('unsaved');
+      const timer = setTimeout(() => {
+        saveCanvasData();
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [canvasItems, currentView]);
+
+  // Save canvas data
+  const saveCanvasData = async () => {
+    if (canvasItems.length === 0) return;
+    
+    setSaveStatus('saving');
+    try {
+      const canvasData = {
+        boardId: selectedBoard?.id || 'default',
+        boardName: selectedBoard?.name || 'Untitled Board',
+        items: canvasItems,
+        lastModified: new Date().toISOString()
+      };
+      
+      // Save to localStorage for now (could be extended to backend)
+      localStorage.setItem(`brainstorm_${canvasData.boardId}`, JSON.stringify(canvasData));
+      setSaveStatus('saved');
+    } catch (error) {
+      console.error('Error saving canvas:', error);
+      setSaveStatus('unsaved');
+    }
+  };
+
+  // Load canvas data
+  const loadCanvasData = (boardId) => {
+    try {
+      const savedData = localStorage.getItem(`brainstorm_${boardId}`);
+      if (savedData) {
+        const canvasData = JSON.parse(savedData);
+        setCanvasItems(canvasData.items || []);
+      }
+    } catch (error) {
+      console.error('Error loading canvas:', error);
+    }
+  };
+
+  // Load data when board changes
+  useEffect(() => {
+    if (selectedBoard && currentView === 'canvas') {
+      loadCanvasData(selectedBoard.id);
+    }
+  }, [selectedBoard, currentView]);
 
   // Mock boards data similar to Milanote
   useEffect(() => {
