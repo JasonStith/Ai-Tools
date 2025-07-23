@@ -144,12 +144,12 @@ class ToolModel(BaseModel):
 # AI Tools Configuration
 AI_TOOLS = [
     {
-        "name": "Torch Builder",
+        "name": "Brainstorm Ideas",
         "category": "Pre-Production",
-        "description": "Build and configure AI models and settings",
-        "replicate_model": "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
-        "inputs": {"prompt": "text", "negative_prompt": "text"},
-        "icon": "🔧"
+        "description": "Generate creative concepts and ideas for your film projects",
+        "replicate_model": "meta/llama-2-7b-chat:8e6975e5ed6174911a6ff3d60540dfd4844201974602551e10e9e87ab143d81e",
+        "inputs": {"prompt": "text", "genre": "text"},
+        "icon": "💡"
     },
     {
         "name": "Script Writer",
@@ -262,6 +262,14 @@ AI_TOOLS = [
         "replicate_model": "stability-ai/stable-video-diffusion:3f0457e4619daac51203dedb1a4c069c4c2f5b9bab8c0bb78c1d0b8d6ab77e0c",
         "inputs": {"video": "video", "platform": "text"},
         "icon": "🌐"
+    },
+    {
+        "name": "Torch Builder",
+        "category": "Pre-Production",
+        "description": "Build and configure AI models and settings",
+        "replicate_model": "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
+        "inputs": {"prompt": "text", "negative_prompt": "text"},
+        "icon": "🔧"
     }
 ]
 
