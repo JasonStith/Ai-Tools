@@ -20,8 +20,8 @@ const Hero = () => {
               <span className="bg-gradient-to-r from-pink-400 via-purple-300 to-orange-300 bg-clip-text text-transparent">
                 Image.
               </span>
-              <span className="block text-white mt-2">
-                Your story
+              <span className="text-white">
+                {' '}Your story
               </span>
             </h1>
           </div>
