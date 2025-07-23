@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 import MusicStudio from './MusicStudio';
 import ScriptWriter from './ScriptWriter';
+import CharacterBuilder from './CharacterBuilder';
 
 const ToolInterface = ({ tool, onBack }) => {
   const [inputs, setInputs] = useState({});
@@ -19,6 +20,11 @@ const ToolInterface = ({ tool, onBack }) => {
   // If it's the Script Writer tool, render the dedicated Script Writer
   if (tool.name === 'Script Writer') {
     return <ScriptWriter onBack={onBack} />;
+  }
+
+  // If it's the Character Builder tool, render the dedicated Character Builder
+  if (tool.name === 'Character Builder') {
+    return <CharacterBuilder onBack={onBack} />;
   }
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
