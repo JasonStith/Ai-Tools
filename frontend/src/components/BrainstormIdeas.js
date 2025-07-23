@@ -546,7 +546,16 @@ const BrainstormIdeas = ({ onBack }) => {
             <span>|</span>
             <span>Tools: {tools.length}</span>
             <span>|</span>
-            <span className="text-green-600">● Ready</span>
+            <span className={`flex items-center space-x-1 ${
+              saveStatus === 'saved' ? 'text-green-600' : 
+              saveStatus === 'saving' ? 'text-yellow-600' : 'text-red-600'
+            }`}>
+              <span className="w-2 h-2 rounded-full bg-current"></span>
+              <span>{
+                saveStatus === 'saved' ? 'Saved' :
+                saveStatus === 'saving' ? 'Saving...' : 'Unsaved'
+              }</span>
+            </span>
           </div>
         </div>
       </div>
