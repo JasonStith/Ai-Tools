@@ -301,7 +301,7 @@ const BrainstormIdeas = ({ onBack }) => {
     );
   }
 
-  // Canvas View
+  // Canvas View - Enhanced with better state management and debugging
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Canvas Header */}
@@ -309,16 +309,24 @@ const BrainstormIdeas = ({ onBack }) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <motion.button
-              onClick={() => setCurrentView('boards')}
-              className="text-gray-600 hover:text-gray-900 transition-colors"
+              onClick={() => {
+                setCurrentView('boards');
+                setSelectedBoard(null);
+              }}
+              className="text-gray-600 hover:text-gray-900 transition-colors flex items-center space-x-2"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              ← Back to Boards
+              <span>←</span>
+              <span>Back to Boards</span>
             </motion.button>
+            <div className="h-6 w-px bg-gray-300"></div>
             <h1 className="text-xl font-bold text-gray-900">
               {selectedBoard?.name || 'Brainstorm Canvas'}
             </h1>
+            <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+              Canvas Mode
+            </span>
           </div>
 
           {/* Canvas Tools */}
@@ -330,10 +338,10 @@ const BrainstormIdeas = ({ onBack }) => {
                   setSelectedTool(tool.id);
                   setIsAddingItem(true);
                 }}
-                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors shadow-sm ${
                   selectedTool === tool.id
-                    ? 'bg-blue-100 text-blue-700 border border-blue-300'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
                 }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -342,6 +350,17 @@ const BrainstormIdeas = ({ onBack }) => {
                 <span className="text-sm font-medium">{tool.name}</span>
               </motion.button>
             ))}
+            
+            {/* Additional Actions */}
+            <div className="h-6 w-px bg-gray-300 mx-2"></div>
+            <motion.button
+              onClick={() => generateIdeas('cinematic')}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              ✨ AI Ideas
+            </motion.button>
           </div>
         </div>
       </div>
@@ -349,16 +368,19 @@ const BrainstormIdeas = ({ onBack }) => {
       {/* Canvas Area */}
       <div 
         ref={canvasRef}
-        className="relative w-full h-screen bg-gray-50 overflow-hidden cursor-crosshair"
+        className={`relative w-full bg-gray-50 overflow-hidden ${isAddingItem ? 'cursor-crosshair' : 'cursor-default'}`}
         onClick={addCanvasItem}
-        style={{ height: 'calc(100vh - 80px)' }}
+        style={{ height: 'calc(100vh - 120px)' }}
       >
-        {/* Grid Pattern */}
+        {/* Enhanced Grid Pattern */}
         <div 
-          className="absolute inset-0 opacity-20"
+          className="absolute inset-0 opacity-30"
           style={{
-            backgroundImage: 'radial-gradient(circle, #d1d5db 1px, transparent 1px)',
-            backgroundSize: '20px 20px'
+            backgroundImage: `
+              linear-gradient(to right, #e5e7eb 1px, transparent 1px),
+              linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)
+            `,
+            backgroundSize: '24px 24px'
           }}
         />
 
@@ -367,38 +389,80 @@ const BrainstormIdeas = ({ onBack }) => {
           <DraggableItem key={item.id} item={item} setCanvasItems={setCanvasItems} />
         ))}
 
-        {/* Instructions */}
+        {/* Enhanced Instructions */}
         {canvasItems.length === 0 && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center">
-              <div className="text-6xl mb-4">💡</div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-2">Start Brainstorming</h3>
-              <p className="text-gray-600 mb-6">
-                Select a tool above and click anywhere on the canvas to add ideas
+            <div className="text-center max-w-md">
+              <div className="text-8xl mb-6">🎬</div>
+              <h3 className="text-3xl font-bold text-gray-800 mb-3">Welcome to Your Creative Canvas</h3>
+              <p className="text-gray-600 mb-8 leading-relaxed">
+                Start your brainstorming journey! Select a tool above and click anywhere to add ideas, 
+                or let AI spark your creativity with generated concepts.
               </p>
-              <motion.button
-                onClick={() => generateIdeas('cinematic')}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Generate First Ideas
-              </motion.button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <motion.button
+                  onClick={() => generateIdeas('cinematic')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-medium shadow-lg"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  ✨ Generate AI Ideas
+                </motion.button>
+                <motion.button
+                  onClick={() => {
+                    setSelectedTool('note');
+                    setIsAddingItem(true);
+                  }}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white px-8 py-4 rounded-lg font-medium shadow-lg"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  📝 Add First Note
+                </motion.button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Loading Indicator */}
+        {loading && (
+          <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+            <div className="bg-white rounded-lg p-6 shadow-xl">
+              <div className="flex items-center space-x-3">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                <span className="text-gray-700 font-medium">Generating creative ideas...</span>
+              </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* Status Bar */}
-      <div className="bg-white border-t border-gray-200 px-6 py-2">
+      {/* Enhanced Status Bar */}
+      <div className="bg-white border-t border-gray-200 px-6 py-3">
         <div className="flex items-center justify-between text-sm text-gray-600">
-          <div>
-            {isAddingItem ? `Click to add ${selectedTool}` : `${canvasItems.length} items on canvas`}
+          <div className="flex items-center space-x-4">
+            <span className="font-medium">
+              {isAddingItem ? (
+                <span className="text-blue-600">🎯 Click anywhere to add {selectedTool}</span>
+              ) : (
+                <span>{canvasItems.length} items on canvas</span>
+              )}
+            </span>
+            {canvasItems.length > 0 && (
+              <button 
+                onClick={() => setCanvasItems([])}
+                className="text-red-600 hover:text-red-700 text-xs"
+              >
+                Clear Canvas
+              </button>
+            )}
           </div>
           <div className="flex items-center space-x-4">
-            <span>Zoom: 100%</span>
+            <span>View: Canvas</span>
             <span>|</span>
-            <span>Canvas: Infinite</span>
+            <span>Tools: {tools.length}</span>
+            <span>|</span>
+            <span className="text-green-600">● Ready</span>
           </div>
         </div>
       </div>
