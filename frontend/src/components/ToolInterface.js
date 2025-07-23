@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
+import MusicStudio from './MusicStudio';
 
 const ToolInterface = ({ tool, onBack }) => {
   const [inputs, setInputs] = useState({});
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // If it's the Music tool, render the dedicated Music Studio
+  if (tool.name === 'Music') {
+    return <MusicStudio onBack={onBack} />;
+  }
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
