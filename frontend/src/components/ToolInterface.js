@@ -5,6 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import MusicStudio from './MusicStudio';
 import ScriptWriter from './ScriptWriter';
 import CharacterBuilder from './CharacterBuilder';
+import StoryboardBuilder from './StoryboardBuilder';
 
 const ToolInterface = ({ tool, onBack }) => {
   const [inputs, setInputs] = useState({});
@@ -25,6 +26,11 @@ const ToolInterface = ({ tool, onBack }) => {
   // If it's the Character Builder tool, render the dedicated Character Builder
   if (tool.name === 'Character Builder') {
     return <CharacterBuilder onBack={onBack} />;
+  }
+
+  // If it's the Story Board Builder tool, render the dedicated Storyboard Builder
+  if (tool.name === 'Story Board Builder') {
+    return <StoryboardBuilder onBack={onBack} />;
   }
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
